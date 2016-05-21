@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using OAuthAttacks.Models;
+using System.Net;
+using System.IO;
 
 namespace OAuthAttacks.Controllers
 {
@@ -32,9 +34,9 @@ namespace OAuthAttacks.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -72,6 +74,7 @@ namespace OAuthAttacks.Controllers
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
+
             return View(model);
         }
 
@@ -331,7 +334,7 @@ namespace OAuthAttacks.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -382,6 +385,6 @@ namespace OAuthAttacks.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }
