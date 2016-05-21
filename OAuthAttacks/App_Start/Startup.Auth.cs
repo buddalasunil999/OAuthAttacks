@@ -11,14 +11,12 @@ using System.Net;
 using System.IO;
 using System.Web;
 using System.Threading.Tasks;
-using System.Runtime.Serialization.Json;
 using Newtonsoft.Json.Linq;
 
 namespace OAuthAttacks
 {
     public partial class Startup
     {
-        // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context, user manager and signin manager to use a single instance per request
@@ -51,16 +49,7 @@ namespace OAuthAttacks
             // Once you check this option, your second step of verification during the login process will be remembered on the device where you logged in from.
             // This is similar to the RememberMe option when you log in.
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
-
-            // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
-
-            //app.UseTwitterAuthentication(
-            //   consumerKey: "",
-            //   consumerSecret: "");
-
+            
             var options =
               new FacebookAuthenticationOptions()
               {
@@ -86,22 +75,6 @@ namespace OAuthAttacks
 
     public class MyFacebookAuthenticationProvider : FacebookAuthenticationProvider
     {
-        public override void ApplyRedirect(FacebookApplyRedirectContext context)
-        {
-            base.ApplyRedirect(context);
-        }
-
-        public override Task Authenticated(FacebookAuthenticatedContext context)
-        {
-            // Retrieve the username
-            string facebookUserName = context.UserName;
-
-            // You can even retrieve the full JSON-serialized user
-            var serializedUser = context.User;
-
-            return base.Authenticated(context);
-        }
-
         public override Task ReturnEndpoint(FacebookReturnEndpointContext context)
         {
             if (context.Identity == null)
@@ -149,11 +122,5 @@ namespace OAuthAttacks
                 return obj["id"].ToString();
             }
         }
-    }
-
-    public class FBMe
-    {
-        public string Name { set; get; }
-        public string Id { set; get; }
     }
 }
